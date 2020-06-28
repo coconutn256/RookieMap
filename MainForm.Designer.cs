@@ -32,6 +32,7 @@
             this.pbMain = new System.Windows.Forms.PictureBox();
             this.stpMain = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lbPolygonID = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbPolygonLength = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbPolygonArea = new System.Windows.Forms.ToolStripStatusLabel();
             this.tspMain = new System.Windows.Forms.ToolStrip();
@@ -67,7 +68,8 @@
             this.btnSelectPolygon = new System.Windows.Forms.ToolStripButton();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.lbPolygonID = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnShowTINContour = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnShowGridContour = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
             this.stpMain.SuspendLayout();
             this.tspMain.SuspendLayout();
@@ -108,6 +110,18 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(128, 20);
             this.toolStripStatusLabel1.Text = "选中多边形信息: ";
+            // 
+            // lbPolygonID
+            // 
+            this.lbPolygonID.AutoSize = false;
+            this.lbPolygonID.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.lbPolygonID.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenInner;
+            this.lbPolygonID.Name = "lbPolygonID";
+            this.lbPolygonID.Size = new System.Drawing.Size(130, 20);
+            this.lbPolygonID.Text = "id: -1";
+            this.lbPolygonID.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lbPolygonLength
             // 
@@ -273,6 +287,9 @@
             // 
             // btnShowContour
             // 
+            this.btnShowContour.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnShowTINContour,
+            this.btnShowGridContour});
             this.btnShowContour.Name = "btnShowContour";
             this.btnShowContour.Size = new System.Drawing.Size(226, 26);
             this.btnShowContour.Text = "显示/隐藏等高线";
@@ -434,17 +451,19 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // lbPolygonID
+            // btnShowTINContour
             // 
-            this.lbPolygonID.AutoSize = false;
-            this.lbPolygonID.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.lbPolygonID.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenInner;
-            this.lbPolygonID.Name = "lbPolygonID";
-            this.lbPolygonID.Size = new System.Drawing.Size(130, 20);
-            this.lbPolygonID.Text = "id: -1";
-            this.lbPolygonID.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShowTINContour.Name = "btnShowTINContour";
+            this.btnShowTINContour.Size = new System.Drawing.Size(242, 26);
+            this.btnShowTINContour.Text = "显示/隐藏TIN等高线";
+            this.btnShowTINContour.Click += new System.EventHandler(this.btnShowTINContour_Click);
+            // 
+            // btnShowGridContour
+            // 
+            this.btnShowGridContour.Name = "btnShowGridContour";
+            this.btnShowGridContour.Size = new System.Drawing.Size(242, 26);
+            this.btnShowGridContour.Text = "显示/隐藏格网等高线";
+            this.btnShowGridContour.Click += new System.EventHandler(this.btnShowGridContour_Click);
             // 
             // fmMain
             // 
@@ -516,6 +535,8 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem btnShowPoints;
         private System.Windows.Forms.ToolStripStatusLabel lbPolygonID;
+        private System.Windows.Forms.ToolStripMenuItem btnShowTINContour;
+        private System.Windows.Forms.ToolStripMenuItem btnShowGridContour;
     }
 }
 

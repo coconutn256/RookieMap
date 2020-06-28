@@ -47,6 +47,7 @@
             this.btnDenseGridCancel.TabIndex = 10;
             this.btnDenseGridCancel.Text = "取消";
             this.btnDenseGridCancel.UseVisualStyleBackColor = true;
+            this.btnDenseGridCancel.Click += new System.EventHandler(this.btnDenseGridCancel_Click);
             // 
             // btnDenseGridOk
             // 
@@ -57,6 +58,7 @@
             this.btnDenseGridOk.TabIndex = 9;
             this.btnDenseGridOk.Text = "确定";
             this.btnDenseGridOk.UseVisualStyleBackColor = true;
+            this.btnDenseGridOk.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnDenseGridOk_MouseClick);
             // 
             // gbAddGrid
             // 

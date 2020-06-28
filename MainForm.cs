@@ -21,7 +21,8 @@ namespace RookieMap
         bool blShowPoints;
         bool blShowGrid;
         bool blShowTIN;
-        bool blShowContour;
+        bool blShowTINContour;
+        bool blShowGridContour;
         bool blShowPolygon;
 
         //显示用变量
@@ -62,6 +63,7 @@ namespace RookieMap
 
         //衍生数据
         Grid grid = new Grid();
+        TIN tin = new TIN();
 
         public fmMain()
         {
@@ -71,7 +73,8 @@ namespace RookieMap
             this.pbMain.MouseWheel += new MouseEventHandler(pbMain_MouseWheel);
             blShowGrid = false;
             blShowTIN = false;
-            blShowContour = false;
+            blShowTINContour = false;
+            blShowGridContour = false;
             blShowPolygon = false;
 
             scrollbox = false;
@@ -306,6 +309,13 @@ namespace RookieMap
             g.DrawLine(pen, p1, p2);
         }
 
+        private void DrawEdge(TIN_Edge edge, Graphics g, Pen pen)
+        {
+            Point p1 = PointD2Point(RealtoDisplay(tin.Source[edge.pt1_id].Pointd));
+            Point p2 = PointD2Point(RealtoDisplay(tin.Source[edge.pt2_id].Pointd));
+            g.DrawLine(pen, p1, p2);
+        }
+
         /// <summary>
         /// 内容绘制
         /// </summary>
@@ -314,7 +324,7 @@ namespace RookieMap
         private void pbMain_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            Pen p1 = new Pen(Color.Black, 1f);
+            Pen p1 = new Pen(Color.Green, 1f);
             Pen p2 = new Pen(Color.Purple, 1.5f);
             Pen p3 = new Pen(Color.Cyan, 2f);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
@@ -347,16 +357,24 @@ namespace RookieMap
                 foreach(MyPoint point in data)
                 {
                     PointD pt = RealtoDisplay(point.Pointd);
-                    g.FillEllipse(Brushes.Blue, (float)pt.X, (float)pt.Y, 3, 3);
+                    g.FillEllipse(Brushes.Blue, (float)pt.X-2, (float)pt.Y-2, 4, 4);
                 }
             }
 
             if (blShowTIN)
             {
+                foreach(TIN_Edge edge in tin.Edges)
+                {
+                    DrawEdge(edge, g, p1);
+                }
+            }
+
+            if (blShowTINContour)
+            {
 
             }
 
-            if (blShowContour)
+            if (blShowGridContour)
             {
 
             }
@@ -409,8 +427,9 @@ namespace RookieMap
                             if (boundary[3] < y)
                                 boundary[3] = y;
                         }
-                    }
+                    }                  
                 }
+                sr.Close();
                 scale = Math.Min(pbMain.Width / (boundary[2] - boundary[0]), pbMain.Height / (boundary[3] - boundary[1])) / 1.05;
                 blShowPoints = true;
                 offsetX = boundary[0];
@@ -420,6 +439,7 @@ namespace RookieMap
                 offsetX_back = offsetX;
                 offsetY_back = offsetY;
                 pbMain.Refresh();
+                file.Dispose();
             }
         }
 
@@ -445,7 +465,18 @@ namespace RookieMap
 
         private void btnShowContour_Click(object sender, EventArgs e)
         {
-            blShowContour = !blShowContour;
+
+        }
+
+        private void btnShowTINContour_Click(object sender, EventArgs e)
+        {
+            blShowTINContour = !blShowTINContour;
+            pbMain.Refresh();
+        }
+
+        private void btnShowGridContour_Click(object sender, EventArgs e)
+        {
+            blShowGridContour = !blShowGridContour;
             pbMain.Refresh();
         }
 
@@ -469,8 +500,6 @@ namespace RookieMap
             fmaddgrid.Show();
         }
 
-
-
         private void btnDenseGrid_Click(object sender, EventArgs e)
         {
             fmdensegrid.Show();
@@ -478,9 +507,12 @@ namespace RookieMap
 
         private void btnAddTIN_Click(object sender, EventArgs e)
         {
-            
+            tin.Source = data.ToArray();
+            tin.Bbox = boundary;
+            tin.GenerateTIN();
+            blShowTIN = true;
+            pbMain.Refresh();
         }
-
 
         private void btnAddContour_Click(object sender, EventArgs e)
         {
@@ -496,6 +528,14 @@ namespace RookieMap
             grid.Source = data.ToArray();
             grid.GenerateGrid();
             blShowGrid = true;
+            pbMain.Refresh();
+        }
+
+        public void DenseGrid()
+        {
+            int x_dense = fmdensegrid.x;
+            int y_dense = fmdensegrid.y;
+            grid.DenseGrid(x_dense, y_dense);
             pbMain.Refresh();
         }
         #endregion

@@ -261,9 +261,62 @@ namespace RookieMap
         /// </summary>
         /// <param name="x_dense"></param>
         /// <param name=""></param>
-        private void DenseGrid(int x_dense, int y_dense)
+        public void DenseGrid(int x_dense, int y_dense)
         {
             MyPoint[,] newGrids = new MyPoint[this.x_num*x_dense+1, this.y_num*y_dense+1];
+            for(int col = 0; col <= this.x_num; col++)
+            {
+                for(int row = 0; row <= this.y_num; row++)
+                {
+                    newGrids[col * x_dense, row * y_dense] = this.points[col, row];
+                }
+            }
+
+            for (int i = 0; i < this.x_num * x_dense + 1; i++)
+            {
+                for (int j = 0; j < this.y_num * y_dense + 1; j++)
+                {
+                    int col = i / x_dense;
+                    int col2 = i % x_dense;
+                    int row = j / y_dense;
+                    int row2 = j % y_dense;
+
+                    if (col2 ==0 && row2 == 0)
+                    {
+                        continue;
+                    }
+
+                    double x = this.bbox[0] + (this.bbox[2] - this.bbox[0]) / (this.x_num * x_dense) * i;
+                    double y = this.bbox[1] + (this.bbox[3] - this.bbox[1]) / (this.y_num * y_dense) * j;
+
+                    double z1, z2, z;
+                    if (col == this.x_num) //col2==0
+                    {
+                        z1 = this.points[col, row].Z;
+                        z2 = this.points[col, row + 1].Z;
+                        z = (z2 - z1) / y_dense * row2 + z1;
+                    } else if (row == this.y_num) //row2==0
+                    {
+                        z = col2 * (this.points[col + 1, row].Z - this.points[col, row].Z) / x_dense + this.points[col, row].Z;
+                    } else
+                    {
+                        z1 = (this.points[col + 1, row].Z - this.points[col, row].Z) / x_dense * col2 + this.points[col, row].Z;
+                        z2 = (this.points[col + 1, row + 1].Z - this.points[col, row + 1].Z) / x_dense * col2 + this.points[col, row + 1].Z;
+                        z = (z2 - z1) / y_dense * row2 + z1;
+                    }
+
+                    MyPoint tmp_pt = new MyPoint();
+                    tmp_pt.X = x;
+                    tmp_pt.Y = y;
+                    tmp_pt.Z = z;
+                    newGrids[i, j] = tmp_pt;
+                }
+            }
+
+            this.x_num *= x_dense;
+            this.y_num *= y_dense;
+            this.points = newGrids;
+            GenerateGridLine();
         }
 
         /// <summary>
